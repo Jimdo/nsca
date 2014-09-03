@@ -90,8 +90,14 @@ func (e *encryption) encrypt(b []byte) error {
 	switch e.method {
 	case ENCRYPT_DES:
 		block, err = des.NewCipher(key[:des.BlockSize])
+		enc := NewCFB8Encrypter(block, e.iv[:block.BlockSize()])
+		enc.XORKeyStream(b, b)
+		return nil
 	case ENCRYPT_3DES:
 		block, err = des.NewTripleDESCipher(key[:des.BlockSize*3])
+		enc := NewCFB8Encrypter(block, e.iv[:block.BlockSize()])
+		enc.XORKeyStream(b, b)
+		return nil
 	case ENCRYPT_RIJNDAEL128:
 		block, err = aes.NewCipher(key[:16])
 	case ENCRYPT_RIJNDAEL192:

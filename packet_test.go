@@ -145,14 +145,12 @@ func TestServer(t *testing.T) {
 		t.Fatalf("Could not read initialization packet: %s", err)
 	}
 	// create Encryption
-	enc := newEncryption(ENCRYPT_DES, ip.iv, "password")
+	enc := newEncryption(ENCRYPT_DES, ip.iv, "password123")
 	// create message
 	msg := newDataPacket(ip.timestamp, STATE_OK, "testHost", "testService", "A plugin message")
 	// write message
-	for i := 0; i < 10; i++ {
-		err = msg.write(conn, enc)
-		if err != nil {
-			t.Errorf("Error writing message: %s", err)
-		}
+	err = msg.write(conn, enc)
+	if err != nil {
+		t.Errorf("Error writing message: %s", err)
 	}
 }
