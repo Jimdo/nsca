@@ -135,22 +135,24 @@ func TestSession(t *testing.T) {
 func TestServer(t *testing.T) {
 	// TODO: disable the Skip if you have a real NSCA server to test against
 	//t.Skip("Skipping test that uses a real NSCA server")
-	conn, err := net.Dial("tcp", ":5667")
-	if err != nil {
-		t.Fatalf("Could not connect to server: %s", err)
-	}
-	defer conn.Close()
-	ip, err := readInitializationPacket(conn)
-	if err != nil {
-		t.Fatalf("Could not read initialization packet: %s", err)
-	}
-	// create Encryption
-	enc := newEncryption(ENCRYPT_DES, ip.iv, "password123")
-	// create message
-	msg := newDataPacket(ip.timestamp, STATE_OK, "testHost", "testService", "A plugin message")
 	// write message
-	err = msg.write(conn, enc)
-	if err != nil {
-		t.Errorf("Error writing message: %s", err)
+	for i := 0; i < 10; i++ {
+		conn, err := net.Dial("tcp", ":5667")
+		if err != nil {
+			t.Fatalf("Could not connect to server: %s", err)
+		}
+		ip, err := readInitializationPacket(conn)
+		if err != nil {
+			t.Fatalf("Could not read initialization packet: %s", err)
+		}
+		// create Encryption
+		enc := newEncryption(ENCRYPT_DES, ip.iv, "password")
+		// create message
+		msg := newDataPacket(ip.timestamp, STATE_OK, "testHost", "testService", "A plugin message")
+		err = msg.write(conn, enc)
+		if err != nil {
+			t.Errorf("Error writing message: %s", err)
+		}
+		conn.Close()
 	}
 }

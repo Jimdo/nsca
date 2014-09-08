@@ -4,7 +4,7 @@
 $PROVISION = <<SCRIPT
 echo I am but an empty shell
 apt-get -y install nsca
-sed -i "s/#password=/password=password123/" /etc/nsca.cfg
+sed -i "s/#password=/password=password/" /etc/nsca.cfg
 sed -i "s/decryption_method=1/decryption_method=3/" /etc/nsca.cfg
 sed -i "s/debug=0/debug=1/" /etc/nsca.cfg
 /etc/init.d/nsca restart
