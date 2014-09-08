@@ -2,6 +2,7 @@
 package nsca
 
 import (
+	"log"
 	"net"
 )
 
@@ -72,10 +73,12 @@ type NSCAServer struct {
 func (n *NSCAServer) Connect(connectInfo ServerInfo) error {
 	conn, err := net.Dial("tcp", net.JoinHostPort(connectInfo.Host, connectInfo.Port))
 	if err != nil {
+		log.Printf("Dialing failed: %s", err)
 		return err
 	}
 	ip, err := readInitializationPacket(conn)
 	if err != nil {
+		log.Printf("Reading IV failed: %s", err)
 		conn.Close()
 		return err
 	}
@@ -90,6 +93,7 @@ func (n *NSCAServer) Connect(connectInfo ServerInfo) error {
 func (n *NSCAServer) Close() {
 	if n.conn != nil {
 		n.conn.Close()
+		n.conn = nil
 	}
 	n.serverTimestamp = 0
 	n.encryption = nil
