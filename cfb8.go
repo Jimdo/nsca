@@ -23,13 +23,11 @@ func newCFB8(block cipher.Block, iv []byte, decrypt bool) (stream cipher.Stream)
 }
 
 func NewCFB8Encrypter(block cipher.Block, iv []byte) (stream cipher.Stream) {
-	stream = newCFB8(block, iv, false)
-	return
+	return newCFB8(block, iv, false)
 }
 
 func NewCFB8Decrypter(block cipher.Block, iv []byte) (stream cipher.Stream) {
-	stream = newCFB8(block, iv, true)
-	return
+	return newCFB8(block, iv, true)
 }
 
 func (this *cfb8) XORKeyStream(dst, src []byte) {
